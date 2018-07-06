@@ -38,7 +38,7 @@ for dom_name,dom_attr in domains.items():
 	
 
 collProb={}
-for range_size in [90]:
+for range_size in [100]:
 
 	nr_ranges=int((uid_range_max-uid_range_min)/range_size)
 	print("Number of ranges="+str(nr_ranges)+" range_size="+str(range_size))
@@ -104,14 +104,17 @@ for range_size in [90]:
 
 		print("\terrors="+str(errors)+" collisions="+str(collisions)+" tries="+str(tries))
 	
-	collProb[range_size]={"nr_ranges": nr_ranges, "collProb": collisions, "errors": errors, "tries": tries}
+	collProb[range_size]={"nr_ranges": nr_ranges, "collProb": collisions, "errors": errors, "tries": tries, "range_size": range_size}
 				
 #	print("oldColl="+str(oldColl)+"newColl="+str(newColl))
 
 range_size,attrs=zip(*sorted(collProb.items()))
 from numpy import array
 range_size=array(range_size)
-print(attrs)
+import pprint
+
+pp=pprint.PrettyPrinter(indent=4)
+pp.pprint(attrs)
 
 ax = plt.subplot(111)
 w=1
@@ -123,8 +126,7 @@ ax.bar(range_size-2*w, [ myAttrs["collProb"][1]/myAttrs["tries"] for myAttrs in 
 ax.bar(range_size-w, [ myAttrs["collProb"][2]/myAttrs["tries"] for myAttrs in attrs],w,color='y', align='center')
 ax.bar(range_size, [ myAttrs["collProb"][3]/myAttrs["tries"] for myAttrs in attrs],w,color='coral', align='center')
 ax.bar(range_size+w, [ myAttrs["collProb"][4]/myAttrs["tries"] for myAttrs in attrs],w,color='black', align='center')
-ax.bar(range_size+2*w, [ sum(myAttrs["collProb"][4:])/myAttrs["tries"] for myAttrs in attrs],w,color='black', align='center')
-ax.bar(range_size+3*w, [ myAttrs["errors"]/myAttrs["tries"] for myAttrs in attrs],w,color='r', align='center')
+ax.bar(range_size+2*w, [ myAttrs["errors"]/myAttrs["tries"] for myAttrs in attrs],w,color='r', align='center')
 #ax.bar(x-w,collisions[1],color='r', align='center')
 ax.set_xticks(range_size)
 ax.set_xticklabels(range_size)
